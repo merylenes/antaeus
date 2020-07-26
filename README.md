@@ -86,3 +86,101 @@ The code given is structured as follows. Feel free however to modify the structu
 * [Sqlite3](https://sqlite.org/index.html) - Database storage engine
 
 Happy hacking 😁!
+
+## My Take on it!
+2020/07/25
+Not a Java expert nor Kotlin but I enjoy solving puzzles... 
+
+Challenge: "few invoices for the different markets ... schedule payment of those invoices on the first of the month".
+
+### App
+Backend to charge invoices on a specific day of month.
+
+As-Is
+
+![as-is](./media/As-IS.png)
+
+To-Be
+
+![as-is](./media/To-BE.png)
+
+
+Invoices 
+A. Check Status / keep track
+B. Update Status
+C. Check Customer Currency / Convert
+D. Retry Failed Invoices
+E. Apply Discount
+F. Charge Interest due to Overdue Invoices
+
+It should handle exceptions like:
+1. Network issues 
+2. Currency Mismatches 
+3. Insufficient balance 
+4. Customers Not Found
+
+Customer
+A. Suspend Customer
+B. Update Customer Details (Currency)
+
+Job Schedule
+A. Mark Invoices to be Charged for Next Run
+B. Schedule a Monthly Job
+
+Email / Notification
+A. Get a List of Failed Invoices to be checked -> Escalated
+B. Create a Notification Message
+C. Inform Customer about Invoice Status
+
+
+### PLEO-ANTAEUS-CORE:
+### SERVICE
+#### Invoice  
+Present:
+Functions ->
+Fetch All Invoices
+Fetch Invoice By ID
+ToDo: 
+Functions ->
+Update Invoice: Paid to be done (Not Paid / Error) - Done
+Fetch Invoice(s) by Status - Done
+convertCurrency
+
+#### Billing 
+Present: 
+Functions ->
+Charge (TODO)
+ToDO:
+Functions ->
+Charge Single Invoice - Done
+Charge All Invoices create logger - Done
+Check status of Invoice before trying to Charge(paymentProvider) - Done
+        Exceptions:
+        ChecktheCurrency 
+        handleNetworkIssues
+HandleFailedInvoices - retry
+applyDiscount
+chargeInterest
+
+
+#### Customer
+Present: 
+Functions ->
+FectchAll Customers
+FecthByID
+ToDo:
+suspendCustomerSubscription
+updateCustomerDetails
+
+#### Job Schedule
+markInvoicesToBeCharged
+createInvoiceRun
+
+#### Email/Notification
+getListOfFailedInvoices
+createNotificationMessage
+InformCustomeraboutStatus
+createStatements
+handleFailedNotifications
+
+
