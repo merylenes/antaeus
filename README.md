@@ -145,37 +145,48 @@ Present:
 Functions ->
 * Fetch All Invoices
 * Fetch Invoice By ID
+
 ToDo: 
 Functions ->
 * Update Invoice: Paid to be done (Not Paid / Error) - *Done*
+
 My implementation calls the updateInvoice within the DAL, it allows to updateStatus of any sort.
 * Fetch Invoice(s) by Status - *Done*
+
 I have implemented an abstract fetchInvoiceByStatus function in order to cater for various statuses when charging happens or various other processes might need. 
 * convertCurrency
+
 The convert currency function could be called if the Customer' currency is different than the charging company' currency before a charge is made - *outstanding*
 
 #### Billing 
 Present: 
 Functions ->
 * Charge (TODO)
+
 ToDO:
 Functions ->
 * Charge Single Invoice - *Done Basic Only*
+
 When calling the PaymentProvider check for execeptions like mentioned above which is returned.
 
 * Check status of Invoice before trying to Charge(paymentProvider) - *Done Basic Only*
+
 Before I update the invoice I check if the PaymentProvider was successful.
 
 * Charge All Invoices create logger - *Done Basic Only*
+
 The schedule Job would need a functionality in order to charge multiple invoices / multiple customers. ChargeInvoices(by unpaid status) calls the chargeSingleInvoice function and writes a logger. This is still very basic. Here I will implement a Logging Service that can track each charge of when and what happened.
 
 * HandleFailedInvoices - retry - *outstanding*
+
 This function should be created to retry when there were failed invoices, it could be called ad-hoc or by a scheduling service.
 
 * applyDiscount - *outstanding*
+
 It could be that discounts could be applied and the invoice amt should be adjusted.
 
 * chargeInterest - *outstanding*
+
 If a customer is unsuccessful and the invoice is already overdue based on payment terms the backend func can be called to add interest.
 
 
@@ -184,26 +195,41 @@ Present:
 Functions ->
 * FectchAll Customers
 * FecthByID
+
 ToDo:
+Functions ->
 * suspendCustomerSubscription - *outstanding*
+
 If a customer is not paying the subscription service should be terminated.
 * updateCustomerDetails
+
 If a customer' details change like currency etc. This func can assist.
 
 #### Job Schedule
+ToDo:
+Functions ->
 * markInvoicesToBeCharged - *outstanding*
+
 For the schedule Job Service to work a function needs to be created to check which of the invoices should be charged. This could then be used as a status or indicator for the billing Service.
 * createInvoiceRun
+
 Actual Job that will executed perhaps with a cron etc.
 
 #### Email/Notification
+ToDo:
+Functions ->
 * getListOfFailedInvoices - *outstanding*
+
 If a company has a process for the financial clerks to follow-up on unpaid invoices.
 * createNotificationMessage - *outstanding*
+
 Actual function to create a template message / email.
 * InformCustomeraboutStatus - *outstanding*
+
 Call the CreateNotificationMessage for customers with unpaid Invoices.
 * createStatements - *outstanding*
+
 Provide a statement for the account based on invoice status
 * handleFailedNotifications - *outstanding*
+
 If the email was unsuccessful retry send or provide a list of issues.
