@@ -87,100 +87,123 @@ The code given is structured as follows. Feel free however to modify the structu
 
 Happy hacking 😁!
 
-## My Take on it!
-2020/07/25
-Not a Java expert nor Kotlin but I enjoy solving puzzles... 
+### Here I GO!!!
+
+Not a Java/Kotlin expert at all but I enjoy solving puzzles...
 
 Challenge: "few invoices for the different markets ... schedule payment of those invoices on the first of the month".
 
-### App
+### Backend App Primary Function
 Backend to charge invoices on a specific day of month.
 
-As-Is
+#### As-Is
 
 ![as-is](./media/As-IS.png)
 
-To-Be
+Above is a simple diagram showing the existing Functionality within the backend service.
+
+#### To-Be
+Below diagram, I have identified the typical functions needed in order to handle invoices charging.
+
 
 ![as-is](./media/To-BE.png)
 
 
-Invoices 
-A. Check Status / keep track
-B. Update Status
-C. Check Customer Currency / Convert
-D. Retry Failed Invoices
-E. Apply Discount
-F. Charge Interest due to Overdue Invoices
+##### Invoices 
+* Check Status / keep track
+* Update Status
+* Check Customer Currency / Convert
+* Retry Failed Invoices
+* Apply Discount
+* Charge Interest due to Overdue Invoices
 
-It should handle exceptions like:
-1. Network issues 
+The backend should handle exceptions like:
+1. Network  
 2. Currency Mismatches 
 3. Insufficient balance 
 4. Customers Not Found
 
-Customer
-A. Suspend Customer
-B. Update Customer Details (Currency)
+##### Customer
+* Suspend Customer
+* Update Customer Details (Currency)
 
-Job Schedule
-A. Mark Invoices to be Charged for Next Run
-B. Schedule a Monthly Job
+##### Job Schedule
+* Mark Invoices to be Charged for Next Run
+* Schedule a Monthly Job
 
-Email / Notification
-A. Get a List of Failed Invoices to be checked -> Escalated
-B. Create a Notification Message
-C. Inform Customer about Invoice Status
+##### Email / Notification
+* Get a List of Failed Invoices to be checked -> Escalate
+* Create a Notification Message
+* Inform Customer about Invoice Status
 
+My implementation is basic and does not cover all the aspects of Error handling logging encryption etc.
 
 ### PLEO-ANTAEUS-CORE:
 ### SERVICE
 #### Invoice  
 Present:
 Functions ->
-Fetch All Invoices
-Fetch Invoice By ID
+* Fetch All Invoices
+* Fetch Invoice By ID
 ToDo: 
 Functions ->
-Update Invoice: Paid to be done (Not Paid / Error) - Done
-Fetch Invoice(s) by Status - Done
-convertCurrency
+* Update Invoice: Paid to be done (Not Paid / Error) - *Done*
+My implementation calls the updateInvoice within the DAL, it allows to updateStatus of any sort.
+* Fetch Invoice(s) by Status - *Done*
+I have implemented an abstract fetchInvoiceByStatus function in order to cater for various statuses when charging happens or various other processes might need. 
+* convertCurrency
+The convert currency function could be called if the Customer' currency is different than the charging company' currency before a charge is made - *outstanding*
 
 #### Billing 
 Present: 
 Functions ->
-Charge (TODO)
+* Charge (TODO)
 ToDO:
 Functions ->
-Charge Single Invoice - Done
-Charge All Invoices create logger - Done
-Check status of Invoice before trying to Charge(paymentProvider) - Done
-        Exceptions:
-        ChecktheCurrency 
-        handleNetworkIssues
-HandleFailedInvoices - retry
-applyDiscount
-chargeInterest
+* Charge Single Invoice - *Done Basic Only*
+When calling the PaymentProvider check for execeptions like mentioned above which is returned.
+
+* Check status of Invoice before trying to Charge(paymentProvider) - *Done Basic Only*
+Before I update the invoice I check if the PaymentProvider was successful.
+
+* Charge All Invoices create logger - *Done Basic Only*
+The schedule Job would need a functionality in order to charge multiple invoices / multiple customers. ChargeInvoices(by unpaid status) calls the chargeSingleInvoice function and writes a logger. This is still very basic. Here I will implement a Logging Service that can track each charge of when and what happened.
+
+* HandleFailedInvoices - retry - *outstanding*
+This function should be created to retry when there were failed invoices, it could be called ad-hoc or by a scheduling service.
+
+* applyDiscount - *outstanding*
+It could be that discounts could be applied and the invoice amt should be adjusted.
+
+* chargeInterest - *outstanding*
+If a customer is unsuccessful and the invoice is already overdue based on payment terms the backend func can be called to add interest.
 
 
 #### Customer
 Present: 
 Functions ->
-FectchAll Customers
-FecthByID
+* FectchAll Customers
+* FecthByID
 ToDo:
-suspendCustomerSubscription
-updateCustomerDetails
+* suspendCustomerSubscription - *outstanding*
+If a customer is not paying the subscription service should be terminated.
+* updateCustomerDetails
+If a customer' details change like currency etc. This func can assist.
 
 #### Job Schedule
-markInvoicesToBeCharged
-createInvoiceRun
+* markInvoicesToBeCharged - *outstanding*
+For the schedule Job Service to work a function needs to be created to check which of the invoices should be charged. This could then be used as a status or indicator for the billing Service.
+* createInvoiceRun
+Actual Job that will executed perhaps with a cron etc.
 
 #### Email/Notification
-getListOfFailedInvoices
-createNotificationMessage
-InformCustomeraboutStatus
-createStatements
-handleFailedNotifications
-
-
+* getListOfFailedInvoices - *outstanding*
+If a company has a process for the financial clerks to follow-up on unpaid invoices.
+* createNotificationMessage - *outstanding*
+Actual function to create a template message / email.
+* InformCustomeraboutStatus - *outstanding*
+Call the CreateNotificationMessage for customers with unpaid Invoices.
+* createStatements - *outstanding*
+Provide a statement for the account based on invoice status
+* handleFailedNotifications - *outstanding*
+If the email was unsuccessful retry send or provide a list of issues.
