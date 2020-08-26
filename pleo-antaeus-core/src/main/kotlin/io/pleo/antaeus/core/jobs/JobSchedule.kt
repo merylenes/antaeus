@@ -14,7 +14,7 @@ import io.pleo.antaeus.core.external.PaymentProvider
 // Jobs 
 import org.quartz.Job
 import org.quartz.JobExecutionContext
-import org.quartz.JobExecutionException //For the retries
+
 
 //Logger
 import org.slf4j.LoggerFactory
