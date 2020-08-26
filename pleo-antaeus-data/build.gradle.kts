@@ -7,5 +7,5 @@ kotlinProject()
 dataLibs()
 
 dependencies {
-    api(project(":pleo-antaeus-models"))
+    implementation(project(":pleo-antaeus-models"))
 }

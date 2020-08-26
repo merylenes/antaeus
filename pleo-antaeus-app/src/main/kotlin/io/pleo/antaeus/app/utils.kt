@@ -1,6 +1,7 @@
 
 import io.pleo.antaeus.core.external.PaymentProvider
 import io.pleo.antaeus.data.AntaeusDal
+import io.pleo.antaeus.core.services.BillingService
 import io.pleo.antaeus.models.Currency
 import io.pleo.antaeus.models.Invoice
 import io.pleo.antaeus.models.InvoiceStatus
@@ -26,6 +27,9 @@ internal fun setupInitialData(dal: AntaeusDal) {
                 customer = customer,
                 status = if (it == 1) InvoiceStatus.PENDING else InvoiceStatus.PAID
             )
+            .let { 
+                Invoice -> BillingService.monthlyInvoiceRun(Invoice, "0 0 23 L 1/1 ? *") 
+                }
         }
     }
 }

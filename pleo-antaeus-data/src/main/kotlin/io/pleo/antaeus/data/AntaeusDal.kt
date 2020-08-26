@@ -37,6 +37,14 @@ class AntaeusDal(private val db: Database) {
                 .map { it.toInvoice() }
         }
     }
+	
+	fun fetchInvoicesWithStatus(status: InvoiceStatus): List<Invoice> {
+		return transaction(db) {
+			InvoiceTable
+				.select { InvoiceTable.status.eq(status.toString()) }
+				.map { it.toInvoice() }
+		}
+	}
 
     fun createInvoice(amount: Money, customer: Customer, status: InvoiceStatus = InvoiceStatus.PENDING): Invoice? {
         val id = transaction(db) {
@@ -52,27 +60,21 @@ class AntaeusDal(private val db: Database) {
 
         return fetchInvoice(id)
     }
-
-    fun fetchInvoicesByStatus(status : InvoiceStatus): List<Invoice> {
-        return transaction(db) {
+    
+    fun updateInvoice(updatedInvoice: Invoice): Invoice? {
+        transaction(db) {
             InvoiceTable
-                    .select { InvoiceTable.status.eq(status.toString()) }
-                    .map { it.toInvoice() }
+                    .update {
+                        it[this.id] = updatedInvoice.id
+                        it[this.currency] = updatedInvoice.amount.currency.toString()
+                        it[this.customerId] = updatedInvoice.customerId
+                        it[this.value] = updatedInvoice.amount.value
+                        it[this.status] = updatedInvoice.status.toString()
+                    }
         }
-    }
 
-    fun updateInvoice(invoice: Invoice): Invoice {
-		transaction(db) {
-			InvoiceTable.update({
-				InvoiceTable.id eq invoice.id
-			}) {
-                it[status] = invoice.status.toString()
-                it[value] = invoice.amount.value
-				it[currency] = invoice.amount.currency.toString()
-				it[customerId] = invoice.customerId
-			}
-		}
-	}
+        return fetchInvoice(updatedInvoice.id)
+    }
 
     fun fetchCustomer(id: Int): Customer? {
         return transaction(db) {
