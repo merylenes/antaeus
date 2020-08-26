@@ -240,7 +240,8 @@ Try
 * Scheduled monthly job
 * logging output that shows successful/failed charges as they occur
 * Some way to test/verify/trigger the monthly scheduled job
-No Time :)
+
+- No Time :)
 * Network retries
 
 #### Schedule Monthly Job / Logging / Trigger
