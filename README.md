@@ -241,32 +241,30 @@ Try
 * logging output that shows successful/failed charges as they occur
 * Some way to test/verify/trigger the monthly scheduled job
 
-- No Time :)
-* Network retries
+* Network retries - Tight for my existing work schedule.
 
 #### Schedule Monthly Job / Logging / Trigger
 ##### BillingService.kt
-I have revisted  ..\antaeus\core\services\BillingService.kt
-With my previous implementation it was not possible to have a schedule.
+I have revisted  ..\antaeus\core\services\BillingService.kt - *With my previous implementation it was not possible to have a schedule.*
 
 Found documentation to use Kotlin with a Scheduler you could implement it by using quartz - https://www.baeldung.com/quartz
-The key interfaces of the API are:
 
-imported the nessary org.quartz* libraries. Attempted the CronTriggers
+Imported the nessary org.quartz* libraries. Attempted the CronTriggers
 
 http://www.quartz-scheduler.org/documentation/2.4.0-SNAPSHOT/tutorials/
 
 Imported the org.slf4j.LoggerFactory given that it was already available in the API.
+
+Also see more info + comments in BillingService.kt
 
 ##### pleo-antaeus-core\build.gradle.kts
 Added the API for Quartz
 
 
 ##### pleo-antaeus-app\src\main\kotlin\io\pleo\antaeus\app\utils.kt
-Added the Monthly Schedule
-The Cron expression I have will translate the following schedule as shown below:
-0 0 23 L 1/1 ? *
-* Mon Aug 31 23:00:00 UTC 2020
+Added the Monthly Schedule - the Cron expression will translate the following schedule as shown below:
+* 0 0 23 L 1/1 ? *
+** Mon Aug 31 23:00:00 UTC 2020
 
 
 ##### pleo-antaeus-app\src\main\kotlin\io\pleo\antaeus\app\AntaeusApp.kt
