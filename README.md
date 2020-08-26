@@ -235,11 +235,12 @@ Provide a statement for the account based on invoice status
 If the email was unsuccessful retry send or provide a list of issues.
 
 ## 2020/08/26
-### Extention
+### Extension
 Try 
 * Scheduled monthly job
 * logging output that shows successful/failed charges as they occur
 * Some way to test/verify/trigger the monthly scheduled job
+No Time :)
 * Network retries
 
 #### Schedule Monthly Job / Logging / Trigger
@@ -262,9 +263,9 @@ Added the API for Quartz
 
 ##### pleo-antaeus-app\src\main\kotlin\io\pleo\antaeus\app\utils.kt
 Added the Monthly Schedule
-The Cron expression I have will translate the following schedule as shown below "0 0 23 L 1/1 ? *"
-Mon Aug 31 23:00:00 UTC 2020
-Wed Sep 30 23:00:00 UTC 2020
+The Cron expression I have will translate the following schedule as shown below:
+0 0 23 L 1/1 ? *
+* Mon Aug 31 23:00:00 UTC 2020
 
 
 ##### pleo-antaeus-app\src\main\kotlin\io\pleo\antaeus\app\AntaeusApp.kt
